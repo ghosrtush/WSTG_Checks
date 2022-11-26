@@ -16,7 +16,7 @@ def robots_check(url):
     if robots.status_code == 200:
         return robots.text
     else:
-        return "Robots.txt not found"
+        return "[-] Robots.txt not found"
 
 
 # banner grabbing for  server versions + info leakage
@@ -50,3 +50,20 @@ def wapalyzer(url):
     prettyfied_dict = json.dumps(response_dict, indent=4)
     return prettyfied_dict
     # TODO : Extract name and version from JSON
+
+def crossdomainpolicy(url):
+    crossdomain = requests.get('https://' + url + '/crossdomain.xml')
+    clientaccess = requests.get('https://' + url + '/clientaccesspolicy.xml')
+
+    if crossdomain.status_code == 200:
+        print(crossdomain.text)
+    else:
+        print("[-] crossdomain.xml not found")
+
+    if clientaccess.status_code == 200:
+        print(clientaccess.text)
+    else:
+        print("[-] clientaccesspolicy.xml not found")
+
+
+crossdomainpolicy("google.com")
