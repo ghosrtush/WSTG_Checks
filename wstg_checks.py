@@ -81,3 +81,11 @@ def securitytxt(url):
         print("[-] /.well-known/security.txt not found")
 
 
+def sitemap(url):
+    sitemap = requests.get('https://' + url + '/sitemap.xml')
+
+    if sitemap.status_code == 200:
+        print(sitemap.text)
+    else:
+        print("[-] sitemap.xml not found")
+
