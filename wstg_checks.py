@@ -66,4 +66,18 @@ def crossdomainpolicy(url):
         print("[-] clientaccesspolicy.xml not found")
 
 
-crossdomainpolicy("google.com")
+def securitytxt(url):
+    securitytxt = requests.get('https://' + url + '/security.txt')
+    wellknown = requests.get('https://' + url + '/.well-known/security.txt')
+
+    if securitytxt.status_code == 200:
+        print(securitytxt.text)
+    else:
+        print("[-] security.txt not found")
+
+    if wellknown.status_code == 200:
+        print(wellknown.text)
+    else:
+        print("[-] /.well-known/security.txt not found")
+
+
