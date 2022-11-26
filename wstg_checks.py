@@ -19,23 +19,6 @@ def robots_check(url):
         return "[-] Robots.txt not found"
 
 
-# banner grabbing for  server versions + info leakage
-
-# http headers checks
-# def header_checks(url):
-
-
-# Connect to url
-# iterate through headers
-# check for the list of headers
-# call out missing headers
-# call out misconfigured headers ie csp 'inline' etc
-
-
-# response.headers
-
-# cookie status - after login?s
-
 
 # wafw00f - check for WAF in use
 
@@ -88,4 +71,9 @@ def sitemap(url):
         print(sitemap.text)
     else:
         print("[-] sitemap.xml not found")
+
+
+def heartbleedcheck(url):
+    print("[+] Scanning for Heartbleed")
+    subprocess.call(["nmap", "-p", "443", url, "--script", " ssl-heartbleed", "--script-args", "vulns.showall"])
 
