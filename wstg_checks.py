@@ -76,4 +76,10 @@ def sitemap(url):
 def heartbleedcheck(url):
     print("[+] Scanning for Heartbleed")
     subprocess.call(["nmap", "-p", "443", url, "--script", " ssl-heartbleed", "--script-args", "vulns.showall"])
+    # Maybe just grep for State:
+
+def caacheck(url):
+    subprocess.call(["host", "-t", "caa", url])
+
+
 
