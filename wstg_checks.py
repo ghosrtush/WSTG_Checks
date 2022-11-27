@@ -20,10 +20,11 @@ def robots_check(url):
         return "[-] Robots.txt not found"
 
 
-# wafw00f - check for WAF in use
+def check_waf(url):
+    return subprocess.run(["wafw00f",url])
 
 
-def wapalyzer(url):
+def wapalyzer(urnl):
     url_lookup = "https://api.wappalyzer.com/v2/lookup/?urls=" + url
     headers = {
         'x-api-key': WHATWEB_API_KEY
@@ -74,20 +75,22 @@ def sitemap(url):
         print("[-] sitemap.xml not found")
 
 
-#def heartbleedcheck(url):
-   # print("[+] Scanning for Heartbleed")
-    #subprocess.call(["nmap", "-p", "443", url, "--script", " ssl-heartbleed", "--script-args", "vulns.showall"])
+def poodle_check(url):
+    print("[+] Scanning for Poodle")
+    return subprocess.call(["nmap", "-p", "443", url, "--script", " ssl-poodle", "--script-args", "vulns.showall"])
     # Maybe just grep for State:
 
 
 def caacheck(url):
-    subprocess.call(["host", "-t", "caa", url])
+    return subprocess.call(["host", "-t", "caa", url])
 
 
 def dnssec(url):
-    subprocess.call(["host", "-t", "dnskey", url])
+    return subprocess.call(["host", "-t", "dnskey", url])
 
 def sslchecks(url):
-    subprocess.call(["sslyze", url])
+    return subprocess.call(["sslyze", url])
 
+def check_http_methods(url):
+    return subprocess.call(["nmap",  url, "--script", " http-methods", "--script-args", "http-methods.test-all=true"])
 
