@@ -2,9 +2,7 @@
 import subprocess
 import requests
 import json
-import ssl
-import OpenSSL
-import socket
+
 
 WHATWEB_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
