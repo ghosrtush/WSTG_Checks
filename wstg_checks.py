@@ -2,6 +2,9 @@
 import subprocess
 import requests
 import json
+import ssl
+import OpenSSL
+import socket
 
 WHATWEB_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
@@ -19,7 +22,6 @@ def robots_check(url):
         return "[-] Robots.txt not found"
 
 
-
 # wafw00f - check for WAF in use
 
 
@@ -33,6 +35,7 @@ def wapalyzer(url):
     prettyfied_dict = json.dumps(response_dict, indent=4)
     return prettyfied_dict
     # TODO : Extract name and version from JSON
+
 
 def crossdomainpolicy(url):
     crossdomain = requests.get('https://' + url + '/crossdomain.xml')
@@ -73,13 +76,20 @@ def sitemap(url):
         print("[-] sitemap.xml not found")
 
 
-def heartbleedcheck(url):
-    print("[+] Scanning for Heartbleed")
-    subprocess.call(["nmap", "-p", "443", url, "--script", " ssl-heartbleed", "--script-args", "vulns.showall"])
+#def heartbleedcheck(url):
+   # print("[+] Scanning for Heartbleed")
+    #subprocess.call(["nmap", "-p", "443", url, "--script", " ssl-heartbleed", "--script-args", "vulns.showall"])
     # Maybe just grep for State:
+
 
 def caacheck(url):
     subprocess.call(["host", "-t", "caa", url])
 
+
+def dnssec(url):
+    subprocess.call(["host", "-t", "dnskey", url])
+
+def sslchecks(url):
+    subprocess.call(["sslyze", url])
 
 
