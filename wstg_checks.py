@@ -94,3 +94,16 @@ def sslchecks(url):
 def check_http_methods(url):
     return subprocess.call(["nmap",  url, "--script", " http-methods", "--script-args", "http-methods.test-all=true"])
 
+def header_check(url):
+    response = requests.get("https://" + url)
+
+    required_headers =["X-XSS Protection", "strict-transport-security", "content-security-policy", "cache-control", "access-control-allow-origin", "x-frame-options","x-content-type-options", "Referrer-Policy"]
+    depreciated_headers = ["x-content-security-policy"]
+
+    for h in required_headers:
+        if h in response.headers:
+            print(h + ":" + response.headers[h])
+        else:
+            print("Missing " + h)
+
+
