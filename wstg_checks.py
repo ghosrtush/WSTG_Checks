@@ -2,7 +2,7 @@
 import subprocess
 import requests
 import json
-
+from bs4 import BeautifulSoup, Comment
 
 WHATWEB_API_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
@@ -106,4 +106,20 @@ def header_check(url):
         else:
             print("Missing " + h)
 
+
+
+
+def git_repo(url):
+    response = requests.get("https://" + url + "/.git/config")
+
+    if response.status_code == 200:
+        print("Found git repo")
+
+
+def look_for_comments(url):
+    page = requests.get("https://" + url)
+    soup = BeautifulSoup(page.content, "html.parser")
+
+    for comments in soup.findAll(text=lambda text: isinstance(text, Comment)):
+        print(comments.extract())
 
