@@ -102,7 +102,6 @@ def header_check(url):
 
     required_headers = ["X-XSS Protection", "strict-transport-security", "content-security-policy", "cache-control",
                         "access-control-allow-origin", "x-frame-options", "x-content-type-options", "Referrer-Policy"]
-    depreciated_headers = ["x-content-security-policy"]
 
     for h in required_headers:
         if h in response.headers:
@@ -125,6 +124,7 @@ def look_for_comments(url):
     for comments in soup.findAll(text=lambda text: isinstance(text, Comment)):
         print(comments.extract())
 
+
 def get_meta_info(url):
     page = requests.get("https://" + url)
     soup = BeautifulSoup(page.content, "html.parser")
@@ -133,3 +133,26 @@ def get_meta_info(url):
         print(meta)
 
 
+def cookies_check(url):
+    # from packtpub
+    req = requests.get("https://" + url)
+    for cookie in req.cookies:
+        print('Name:', cookie.name)
+        print('Value:', cookie.value)
+
+        if not cookie.secure:
+            cookie.secure = '\x1b[31mFalse\x1b[39;49m'
+        print('Secure:', cookie.secure)
+
+        if 'httponly' in cookie._rest.keys():
+            cookie.httponly = 'True'
+        else:
+            cookie.httponly = '\x1b[31mFalse\x1b[39;49m'
+        print('HTTPOnly:', cookie.httponly)
+
+        if cookie.domain_initial_dot:
+            cookie.domain_initial_dot = '\x1b[31mTrue\x1b[39;49m'
+        print('Loosly defined domain:', cookie.domain_initial_dot, '\n')
+
+
+cookies_check("www.woolworths.com.au")
