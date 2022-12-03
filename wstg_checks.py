@@ -21,10 +21,10 @@ def robots_check(url):
 
 
 def check_waf(url):
-    return subprocess.run(["wafw00f",url])
+    return subprocess.run(["wafw00f", url])
 
 
-def wapalyzer(urnl):
+def wapalyzer(url):
     url_lookup = "https://api.wappalyzer.com/v2/lookup/?urls=" + url
     headers = {
         'x-api-key': WHATWEB_API_KEY
@@ -88,16 +88,20 @@ def caacheck(url):
 def dnssec(url):
     return subprocess.call(["host", "-t", "dnskey", url])
 
+
 def sslchecks(url):
     return subprocess.call(["sslyze", url])
 
+
 def check_http_methods(url):
-    return subprocess.call(["nmap",  url, "--script", " http-methods", "--script-args", "http-methods.test-all=true"])
+    return subprocess.call(["nmap", url, "--script", " http-methods", "--script-args", "http-methods.test-all=true"])
+
 
 def header_check(url):
     response = requests.get("https://" + url)
 
-    required_headers =["X-XSS Protection", "strict-transport-security", "content-security-policy", "cache-control", "access-control-allow-origin", "x-frame-options","x-content-type-options", "Referrer-Policy"]
+    required_headers = ["X-XSS Protection", "strict-transport-security", "content-security-policy", "cache-control",
+                        "access-control-allow-origin", "x-frame-options", "x-content-type-options", "Referrer-Policy"]
     depreciated_headers = ["x-content-security-policy"]
 
     for h in required_headers:
@@ -105,8 +109,6 @@ def header_check(url):
             print(h + ":" + response.headers[h])
         else:
             print("Missing " + h)
-
-
 
 
 def git_repo(url):
@@ -122,4 +124,12 @@ def look_for_comments(url):
 
     for comments in soup.findAll(text=lambda text: isinstance(text, Comment)):
         print(comments.extract())
+
+def get_meta_info(url):
+    page = requests.get("https://" + url)
+    soup = BeautifulSoup(page.content, "html.parser")
+
+    for meta in soup.findAll("meta"):
+        print(meta)
+
 
